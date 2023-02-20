@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    public GameObject bulletPrefabA;
+    public GameObject bulletPrefabB;
 
     public float speed = 4f;
-    public float bulletDelay = 0.2f;
+    public int power = 1;
+    public float[] bulletDelay;
 
     private Animator animator;
     private Rigidbody2D rBody;
@@ -57,11 +59,46 @@ public class Player_Controller : MonoBehaviour
     private void Fire()
     {
         if (!Input.GetButton("Fire1")) return;
-        if (bulletCooldown < bulletDelay) return;
+        if (bulletCooldown < bulletDelay[power - 1]) return;
         bulletCooldown = 0f;
 
-        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().AddForce(Vector3.up * 8f, ForceMode2D.Impulse);
+        Power();
+    }
+
+    private void Power()
+    {
+        switch (power)
+        {
+            case 1:
+                {
+                    var bullet = Instantiate(bulletPrefabA, transform.position, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                }
+                break;
+            case 2:
+                {
+                    var bullet = Instantiate(bulletPrefabA, transform.position + Vector3.right * 0.15f, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+
+                    bullet = Instantiate(bulletPrefabA, transform.position + Vector3.left * 0.15f, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                }
+                break;
+            default:
+            case 3:
+                {
+                    var bullet = Instantiate(bulletPrefabA, transform.position + Vector3.right * 0.3f, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+
+                    bullet = Instantiate(bulletPrefabA, transform.position + Vector3.left * 0.3f, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+
+                    bullet = Instantiate(bulletPrefabB, transform.position, Quaternion.identity);
+                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                }
+                break;
+        }
+
     }
 
     private void ReloadBullet()
