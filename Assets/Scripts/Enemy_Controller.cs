@@ -13,11 +13,14 @@ public class Enemy_Controller : MonoBehaviour
     public int health = 1;
     private float hitShow = 0f;
 
-    protected virtual void Start()
+    protected GameObject player;
+
+    protected virtual void Awake()
     {
         rBody = GetComponent<Rigidbody2D>();
         spr = GetComponent<SpriteRenderer>();
         ownSprite = spr.sprite;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     protected virtual void Update()
@@ -28,6 +31,8 @@ public class Enemy_Controller : MonoBehaviour
             hitShow -= Time.deltaTime;
         }
         else spr.sprite = ownSprite;
+
+        if (player == null) player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
