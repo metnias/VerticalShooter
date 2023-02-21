@@ -160,5 +160,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSprite: {fileID: 3714015224569861163, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
-  health: 10
+  health: 15
   bulletPrefab: {fileID: 5836790399873870513, guid: 62c4ac35894dcaf46ba3291901c776ca, type: 3}

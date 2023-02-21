@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
+public enum ItemType : int
 {
-    Coin,
-    Power,
-    Boom
+    Coin = 0,
+    Power = 1,
+    Boom = 2
 }
 
 public class Item_Handler : MonoBehaviour
@@ -42,6 +42,7 @@ public class Item_Handler : MonoBehaviour
         }
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 2f;
+        rb.velocity = Vector2.zero;
         rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
         eaten = true;
         Destroy(gameObject, 2f);

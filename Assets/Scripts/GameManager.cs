@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] enemyPrefabs;
     public GameObject explosionPrefab;
     public GameObject boomPrefab;
+    public GameObject[] itemPrefabs;
 
     private float enemySpawnDelay = 3f;
     private float enemySpawnCooldown = -5f;
@@ -23,6 +24,11 @@ public class GameManager : MonoBehaviour
 
     public void AddCoin(int num) => numCoin += num;
     public void AddBoom(int num) => numBoom += num;
+    public bool UseBoom()
+    {
+        if (numBoom > 0) { numBoom--; return true; }
+        return false;
+    }
 
     private void Start()
     {
@@ -93,5 +99,10 @@ public class GameManager : MonoBehaviour
             Destroy(bullet);
         }
         return boom;
+    }
+
+    public static GameObject SpawnItem(Vector3 pos, ItemType type)
+    {
+        return Instantiate(instance.itemPrefabs[(int)type], pos, Quaternion.identity);
     }
 }

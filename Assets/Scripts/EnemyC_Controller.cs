@@ -58,4 +58,22 @@ public class EnemyC_Controller : Enemy_Controller
 
     }
 
+    protected override void Die()
+    {
+        base.Die();
+        float rnd = Random.value;
+        if (rnd < 0.3f)
+        {
+            GameManager.SpawnItem(transform.position, ItemType.Power);
+        }
+        else if (rnd < 0.4f)
+        {
+            GameManager.SpawnItem(transform.position, ItemType.Boom);
+        }
+        else
+        {
+            GameManager.SpawnItem(transform.position, ItemType.Coin);
+        }
+    }
+
 }

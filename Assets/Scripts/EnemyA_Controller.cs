@@ -38,4 +38,12 @@ public class EnemyA_Controller : Enemy_Controller
         bullet.GetComponent<Rigidbody2D>().AddForce(SPEED * Vector3.down, ForceMode2D.Impulse);
     }
 
+    protected override void Die()
+    {
+        base.Die();
+        if (Random.value < 0.4f)
+        {
+            GameManager.SpawnItem(transform.position, ItemType.Coin);
+        }
+    }
 }

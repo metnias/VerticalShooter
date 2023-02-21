@@ -396,6 +396,10 @@ MonoBehaviour:
   - {fileID: 6479979651990219973, guid: 03b0046177b659b42aec5d13c2bbcddb, type: 3}
   explosionPrefab: {fileID: 3243232151759352871, guid: 21960122c27dac94fae86d3f5d1b4bc2, type: 3}
   boomPrefab: {fileID: 2951711281907725997, guid: b346f6121d48da0488e989bcf14d06c3, type: 3}
+  itemPrefabs:
+  - {fileID: 38269487156508217, guid: fc8073130085c5a4b9240ebd3a87b3e2, type: 3}
+  - {fileID: 8914251776270423633, guid: 8ffd42f6942541646a78b61d2fd7a7d3, type: 3}
+  - {fileID: 6594158599727247236, guid: 4bd75509d4244e94088adf25c3a3a021, type: 3}
 --- !u!1 &316442294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,7 +1355,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 29
   m_Sprite: {fileID: 2192450021786810173, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

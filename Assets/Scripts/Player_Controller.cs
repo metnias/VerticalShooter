@@ -34,6 +34,7 @@ public class Player_Controller : MonoBehaviour
 
     private float invulnerability;
     internal bool Invulnerable => invulnerability > 0f;
+    private bool lastBoom = false;
 
     private void Start()
     {
@@ -42,22 +43,23 @@ public class Player_Controller : MonoBehaviour
         spr = GetComponent<SpriteRenderer>();
         invulnerability = 2f;
         Invoke(nameof(GainControl), 1f);
+        GetComponent<CircleCollider2D>().enabled = false;
     }
 
     private void Update()
     {
+        IFrame();
         Move();
         Fire();
         ReloadBullet();
-        if (invulnerability > 0f) 
-        { 
-            invulnerability -= Time.deltaTime;
-            spr.enabled = Mathf.Sin(invulnerability * 50f) > 0f; 
-        }
-        else { invulnerability = 0f; spr.enabled = true; }
+        Boom();
     }
 
-    internal void GainControl() => canControl = true;
+    internal void GainControl()
+    {
+        canControl = true;
+        GetComponent<CircleCollider2D>().enabled = true;
+    }
 
     private void Move()
     {
@@ -76,6 +78,7 @@ public class Player_Controller : MonoBehaviour
 
     private void Fire()
     {
+        if (!canControl) return;
         if (!Input.GetButton("Fire1")) return;
         if (bulletCooldown < bulletDelay[power - 1]) return;
         bulletCooldown = 0f;
@@ -124,6 +127,26 @@ public class Player_Controller : MonoBehaviour
         bulletCooldown += Time.deltaTime;
     }
 
+    private void IFrame()
+    {
+        if (invulnerability > 0f)
+        {
+            invulnerability -= Time.deltaTime;
+            spr.enabled = Mathf.Sin(invulnerability * 50f) > 0f;
+        }
+        else { invulnerability = 0f; spr.enabled = true; }
+    }
+
+    private void Boom()
+    {
+        if (!canControl) return;
+        
+        if (!Input.GetButton("Fire2")) { lastBoom = false; return; }
+        if (lastBoom) return;
+        lastBoom = true;
+        if (!GameManager.Instance().UseBoom()) return;
+        GameManager.SpawnBoom(transform.position);
+    }
 
     private void FixedUpdate()
     {
@@ -169,6 +192,11 @@ public class Player_Controller : MonoBehaviour
     {
         GameManager.Instance().PlayerDie();
         GameManager.SpawnBoom(transform.position);
+        if (power > 1)
+        {
+            var pow = GameManager.SpawnItem(transform.position, ItemType.Power);
+            pow.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 6f, ForceMode2D.Impulse);
+        }
         Destroy(gameObject);
     }
 

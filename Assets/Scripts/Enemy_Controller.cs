@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_Controller : MonoBehaviour
@@ -53,7 +51,7 @@ public class Enemy_Controller : MonoBehaviour
 
     protected virtual void Fire()
     {
-        
+
     }
 
 
@@ -65,8 +63,9 @@ public class Enemy_Controller : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("PlayerBullet"))
         {
-            Destroy(collision.gameObject);
-            OnHit(collision.gameObject.GetComponent<Bullet_Handler>().power);
+            var bullet = collision.gameObject.GetComponent<Bullet_Handler>();
+            if (!bullet.isBoom) Destroy(collision.gameObject);
+            OnHit(bullet.power);
         }
     }
 
