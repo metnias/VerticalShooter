@@ -269,7 +269,7 @@ MonoBehaviour:
   - {fileID: 8051586651449086085, guid: 734560717f3408649bfac513da938d6c, type: 3}
   - {fileID: 5702458358433574453, guid: d986d0ad5b016fd49bb401225a32c18f, type: 3}
   - {fileID: 6479979651990219973, guid: 03b0046177b659b42aec5d13c2bbcddb, type: 3}
-  enemySpawnDelay: 3
+  explosionPrefab: {fileID: 3243232151759352871, guid: 21960122c27dac94fae86d3f5d1b4bc2, type: 3}
 --- !u!1 &316442294
 GameObject:
   m_ObjectHideFlags: 0
