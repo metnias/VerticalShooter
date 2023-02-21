@@ -47,7 +47,7 @@ public class Enemy_Controller : MonoBehaviour
             if (fireDelay < fireCooltime)
             { fireCooltime = 0f; Fire(); }
         }
-        else fireCooltime = 0f;
+        else fireCooltime = player == null ? -1f : 0f;
     }
 
     protected virtual void Fire()
