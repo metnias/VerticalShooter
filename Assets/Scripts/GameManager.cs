@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDie()
     {
+        var bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        foreach (var bullet in bullets) Destroy(bullet);
         Invoke(nameof(RevivePlayer), 2f);
     }
 
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviour
             GameOver(); return;
         }
         life--;
-        Instantiate(playerPrefab, new Vector3(0f, -4f, 0f), Quaternion.identity);
+        Instantiate(playerPrefab, new Vector3(0f, -7f, 0f), Quaternion.identity);
     }
 
     private void GameOver()

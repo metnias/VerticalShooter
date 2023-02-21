@@ -9,7 +9,7 @@ public class EnemyB_Controller : Enemy_Controller
 
     private void Start()
     {
-        fireDelay = 1f;
+        fireDelay = 0.8f;
     }
 
     protected override void Update()

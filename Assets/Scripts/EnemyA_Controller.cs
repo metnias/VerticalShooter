@@ -23,12 +23,14 @@ public class EnemyA_Controller : Enemy_Controller
                 vel = Vector3.ClampMagnitude(vel, 1f);
             }
         }
-        rBody.velocity = vel * 3f;
+        rBody.velocity = vel * 2.5f;
     }
 
     protected override void Fire()
     {
         base.Fire();
+
+        if (player == null) return;
 
         const float SPEED = 7f;
 

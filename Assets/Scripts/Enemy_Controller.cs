@@ -58,6 +58,10 @@ public class Enemy_Controller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("PlayerBorder"))
+        {
+            isVisible = true; return;
+        }
         if (collision.gameObject.CompareTag("PlayerBullet"))
         {
             Destroy(collision.gameObject);
@@ -65,16 +69,20 @@ public class Enemy_Controller : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("PlayerBorder"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            isVisible = true;
+            var pc = collision.gameObject.GetComponent<Player_Controller>();
+            if (pc.Invulnerable) return;
+            pc.Die();
+            OnHit(health); // instakill
         }
     }
 
     protected void OnHit(int power)
     {
+        if (!isVisible) return;
         health -= power;
         if (health > 0)
         {

@@ -10,7 +10,7 @@ public class EnemyC_Controller : Enemy_Controller
 
     private void Start()
     {
-        fireDelay = 2f;
+        fireDelay = 1.5f;
     }
 
     protected override void Update()
@@ -25,7 +25,7 @@ public class EnemyC_Controller : Enemy_Controller
                 vel = Vector3.ClampMagnitude(vel, 1f);
             }
         }
-        rBody.velocity = vel * 0.5f;
+        rBody.velocity = vel * 1f;
     }
 
     protected override void Fire()

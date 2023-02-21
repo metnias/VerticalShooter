@@ -19,10 +19,12 @@ public class Player_Controller : MonoBehaviour
     private const string ANIMX = "DirX";
 
     private float dirX = 0f;
-    private float dirY = 0f;
+    private float dirY = 1f;
     private float bulletCooldown = 0f;
 
     private int borderTouch = 0;
+
+    private bool canControl = false;
 
     [Flags]
     private enum Border
@@ -30,14 +32,16 @@ public class Player_Controller : MonoBehaviour
         Top = 1 << 1, Bottom = 1 << 2, Left = 1 << 3, Right = 1 << 4
     }
 
-    private float invulnability;
+    private float invulnerability;
+    internal bool Invulnerable => invulnerability > 0f;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         rBody = GetComponent<Rigidbody2D>();
         spr = GetComponent<SpriteRenderer>();
-        invulnability = 2f;
+        invulnerability = 2f;
+        Invoke(nameof(GainControl), 1f);
     }
 
     private void Update()
@@ -45,16 +49,20 @@ public class Player_Controller : MonoBehaviour
         Move();
         Fire();
         ReloadBullet();
-        if (invulnability > 0f) 
+        if (invulnerability > 0f) 
         { 
-            invulnability -= Time.deltaTime;
-            spr.enabled = Mathf.Sin(invulnability * 50f) > 0f; 
+            invulnerability -= Time.deltaTime;
+            spr.enabled = Mathf.Sin(invulnerability * 50f) > 0f; 
         }
-        else { invulnability = 0f; spr.enabled = true; }
+        else { invulnerability = 0f; spr.enabled = true; }
     }
+
+    internal void GainControl() => canControl = true;
 
     private void Move()
     {
+        if (!canControl) return;
+
         dirX = Input.GetAxisRaw("Horizontal");
         if ((borderTouch & (int)Border.Left) > 0 && dirX < 0f) dirX = 0f;
         else if ((borderTouch & (int)Border.Right) > 0 && dirX > 0f) dirX = 0f;
@@ -134,7 +142,7 @@ public class Player_Controller : MonoBehaviour
         }
         else if(collision.gameObject.CompareTag("EnemyBullet"))
         {
-            if (invulnability > 0f) return; // iframe
+            if (Invulnerable) return; // iframe
             Destroy(collision.gameObject); // destroy enemy bullet
             Die();
         }
@@ -150,6 +158,14 @@ public class Player_Controller : MonoBehaviour
     }
 
     public void Die()
+    {
+        canControl = false; dirX = 0f; dirY = 0f;
+        rBody.velocity = Vector2.zero;
+        animator.SetTrigger("Die");
+        Invoke(nameof(ReallyDie), 1f);
+    }
+
+    private void ReallyDie()
     {
         GameManager.Instance().PlayerDie();
         GameManager.SpawnExplosion(transform.position);
