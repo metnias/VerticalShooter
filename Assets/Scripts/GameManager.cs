@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -89,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public static GameObject SpawnExplosion(Vector3 pos)

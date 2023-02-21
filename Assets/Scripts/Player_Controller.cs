@@ -195,7 +195,7 @@ public class Player_Controller : MonoBehaviour
         if (power > 1)
         {
             var pow = GameManager.SpawnItem(transform.position, ItemType.Power);
-            pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 6f;
+            pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 1.5f;
         }
         Destroy(gameObject);
     }
