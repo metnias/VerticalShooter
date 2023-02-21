@@ -130,7 +130,7 @@ public class Player_Controller : MonoBehaviour
         Vector2 dir = new(dirX, dirY);
         dir = Vector2.ClampMagnitude(dir, 1f);
 
-        rBody.velocity = speed * dir;
+        rBody.velocity = (Input.GetButton("Fire1") ? 0.5f : 1f) * speed * dir;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -168,7 +168,7 @@ public class Player_Controller : MonoBehaviour
     private void ReallyDie()
     {
         GameManager.Instance().PlayerDie();
-        GameManager.SpawnExplosion(transform.position);
+        GameManager.SpawnBoom(transform.position);
         Destroy(gameObject);
     }
 

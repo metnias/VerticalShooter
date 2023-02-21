@@ -12,10 +12,17 @@ public class GameManager : MonoBehaviour
     public Transform[] spawnPoints;
     public GameObject[] enemyPrefabs;
     public GameObject explosionPrefab;
+    public GameObject boomPrefab;
 
     private float enemySpawnDelay = 3f;
     private float enemySpawnCooldown = -5f;
-    private int life = 3;
+
+    private int numLife = 3;
+    private int numBoom = 1;
+    private int numCoin = 0;
+
+    public void AddCoin(int num) => numCoin += num;
+    public void AddBoom(int num) => numBoom += num;
 
     private void Start()
     {
@@ -48,18 +55,16 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDie()
     {
-        var bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
-        foreach (var bullet in bullets) Destroy(bullet);
         Invoke(nameof(RevivePlayer), 2f);
     }
 
     private void RevivePlayer()
     {
-        if (life < 1)
+        if (numLife < 1)
         {
             GameOver(); return;
         }
-        life--;
+        numLife--;
         Instantiate(playerPrefab, new Vector3(0f, -7f, 0f), Quaternion.identity);
     }
 
@@ -68,9 +73,25 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public static void SpawnExplosion(Vector3 pos)
+    public static GameObject SpawnExplosion(Vector3 pos)
     {
-        var boom = Instantiate(instance.explosionPrefab, pos, Quaternion.identity);
-        Destroy(boom, 0.34f);
+        var bang = Instantiate(instance.explosionPrefab, pos, Quaternion.identity);
+        Destroy(bang, 0.34f);
+        return bang;
+    }
+
+    public static GameObject SpawnBoom(Vector3 pos)
+    {
+        var boom = Instantiate(instance.boomPrefab, pos, Quaternion.identity);
+        Destroy(boom, 0.5f);
+
+        var bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        foreach (var bullet in bullets)
+        {
+            var bang = SpawnExplosion(bullet.transform.position);
+            bang.transform.localScale = Vector3.one * 0.5f; // half sized
+            Destroy(bullet);
+        }
+        return boom;
     }
 }

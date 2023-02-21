@@ -14,6 +14,7 @@ public class Enemy_Controller : MonoBehaviour
     private float hitShow = 0f;
 
     protected GameObject player;
+    protected bool isBoss = false;
 
     protected virtual void Awake()
     {
@@ -76,7 +77,7 @@ public class Enemy_Controller : MonoBehaviour
             var pc = collision.gameObject.GetComponent<Player_Controller>();
             if (pc.Invulnerable) return;
             pc.Die();
-            OnHit(health); // instakill
+            if (!isBoss) OnHit(health); // instakill
         }
     }
 
@@ -86,12 +87,17 @@ public class Enemy_Controller : MonoBehaviour
         health -= power;
         if (health > 0)
         {
-            hitShow = 0.2f;
+            hitShow = 0.15f;
         }
         else
         {
-            GameManager.SpawnExplosion(transform.position);
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    protected virtual void Die()
+    {
+        GameManager.SpawnExplosion(transform.position);
+        Destroy(gameObject);
     }
 }
