@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +13,10 @@ public class GameManager : MonoBehaviour
     public GameObject boomPrefab;
     public GameObject[] itemPrefabs;
 
+    public Text lifeText;
+    public Text boomText;
+    public Text coinText;
+
     private float enemySpawnDelay = 3f;
     private float enemySpawnCooldown = -5f;
 
@@ -22,11 +24,13 @@ public class GameManager : MonoBehaviour
     private int numBoom = 1;
     private int numCoin = 0;
 
-    public void AddCoin(int num) => numCoin += num;
-    public void AddBoom(int num) => numBoom += num;
+    public void AddCoin(int num)
+    { numCoin += num; UpdateUI(); }
+    public void AddBoom(int num)
+    { numBoom += num; UpdateUI(); }
     public bool UseBoom()
     {
-        if (numBoom > 0) { numBoom--; return true; }
+        if (numBoom > 0) { numBoom--; UpdateUI(); return true; }
         return false;
     }
 
@@ -35,15 +39,23 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            UpdateUI();
         }
-        else if(instance != this)
+        else if (instance != this)
             Destroy(gameObject);
+    }
+
+    private void UpdateUI()
+    {
+        lifeText.text = numLife.ToString();
+        boomText.text = numBoom.ToString();
+        coinText.text = numCoin.ToString();
     }
 
     private void Update()
     {
         enemySpawnCooldown += Time.deltaTime;
-        if(enemySpawnCooldown > enemySpawnDelay)
+        if (enemySpawnCooldown > enemySpawnDelay)
         {
             SpawnEnemy();
             enemySpawnCooldown = 0f;
@@ -71,6 +83,7 @@ public class GameManager : MonoBehaviour
             GameOver(); return;
         }
         numLife--;
+        UpdateUI();
         Instantiate(playerPrefab, new Vector3(0f, -7f, 0f), Quaternion.identity);
     }
 

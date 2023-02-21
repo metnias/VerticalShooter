@@ -15,7 +15,7 @@ public class Item_Handler : MonoBehaviour
 
     private bool eaten = false;
 
-    private void Start()
+    private void Awake()
     {
         GetComponent<Rigidbody2D>().velocity = Vector2.down * 0.5f;
     }
