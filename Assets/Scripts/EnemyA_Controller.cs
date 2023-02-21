@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class EnemyA_Controller : Enemy_Controller
 {
+    public GameObject bulletPrefab;
+
+    private void Start()
+    {
+        fireDelay = 0.5f;
+    }
 
     protected override void Update()
     {
@@ -17,6 +23,17 @@ public class EnemyA_Controller : Enemy_Controller
                 vel = Vector3.ClampMagnitude(vel, 1f);
             }
         }
-        rBody.velocity = vel * 4f;
+        rBody.velocity = vel * 3f;
     }
+
+    protected override void Fire()
+    {
+        base.Fire();
+
+        const float SPEED = 7f;
+
+        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        bullet.GetComponent<Rigidbody2D>().AddForce(SPEED * Vector3.down, ForceMode2D.Impulse);
+    }
+
 }

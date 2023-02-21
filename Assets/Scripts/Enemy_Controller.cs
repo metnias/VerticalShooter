@@ -35,14 +35,41 @@ public class Enemy_Controller : MonoBehaviour
         if (player == null) player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    protected float fireDelay = 0.5f;
+    protected float fireCooltime = -1f;
+    protected bool isVisible = false;
+
+    protected virtual void FixedUpdate()
+    {
+        if (isVisible)
+        {
+            fireCooltime += Time.deltaTime;
+            if (fireDelay < fireCooltime)
+            { fireCooltime = 0f; Fire(); }
+        }
+        else fireCooltime = 0f;
+    }
+
+    protected virtual void Fire()
+    {
+        
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("PlayerBullet"))
         {
             Destroy(collision.gameObject);
             OnHit(collision.gameObject.GetComponent<Bullet_Handler>().power);
-            
+        }
+    }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("PlayerBorder"))
+        {
+            isVisible = true;
         }
     }
 
@@ -51,10 +78,11 @@ public class Enemy_Controller : MonoBehaviour
         health -= power;
         if (health > 0)
         {
-            hitShow = 0.5f;
+            hitShow = 0.2f;
         }
         else
         {
+            GameManager.SpawnExplosion(transform.position);
             Destroy(gameObject);
         }
     }

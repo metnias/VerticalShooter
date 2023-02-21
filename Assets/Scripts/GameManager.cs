@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,11 +8,14 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     public static GameManager Instance() => instance;
 
+    public GameObject playerPrefab;
     public Transform[] spawnPoints;
     public GameObject[] enemyPrefabs;
+    public GameObject explosionPrefab;
 
-    public float enemySpawnDelay = 3f;
+    private float enemySpawnDelay = 3f;
     private float enemySpawnCooldown = -5f;
+    private int life = 3;
 
     private void Start()
     {
@@ -40,5 +44,31 @@ public class GameManager : MonoBehaviour
             spawnPoints[Random.Range(0, spawnPoints.Length)].position,
             Quaternion.identity);
 
+    }
+
+    public void PlayerDie()
+    {
+        Invoke(nameof(RevivePlayer), 2f);
+    }
+
+    private void RevivePlayer()
+    {
+        if (life < 1)
+        {
+            GameOver(); return;
+        }
+        life--;
+        Instantiate(playerPrefab, new Vector3(0f, -4f, 0f), Quaternion.identity);
+    }
+
+    private void GameOver()
+    {
+
+    }
+
+    public static void SpawnExplosion(Vector3 pos)
+    {
+        var boom = Instantiate(instance.explosionPrefab, pos, Quaternion.identity);
+        Destroy(boom, 0.34f);
     }
 }

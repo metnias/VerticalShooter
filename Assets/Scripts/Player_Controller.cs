@@ -14,6 +14,7 @@ public class Player_Controller : MonoBehaviour
 
     private Animator animator;
     private Rigidbody2D rBody;
+    private SpriteRenderer spr;
 
     private const string ANIMX = "DirX";
 
@@ -29,11 +30,14 @@ public class Player_Controller : MonoBehaviour
         Top = 1 << 1, Bottom = 1 << 2, Left = 1 << 3, Right = 1 << 4
     }
 
+    private float invulnability;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         rBody = GetComponent<Rigidbody2D>();
+        spr = GetComponent<SpriteRenderer>();
+        invulnability = 2f;
     }
 
     private void Update()
@@ -41,6 +45,12 @@ public class Player_Controller : MonoBehaviour
         Move();
         Fire();
         ReloadBullet();
+        if (invulnability > 0f) 
+        { 
+            invulnability -= Time.deltaTime;
+            spr.enabled = Mathf.Sin(invulnability * 50f) > 0f; 
+        }
+        else { invulnability = 0f; spr.enabled = true; }
     }
 
     private void Move()
@@ -122,6 +132,12 @@ public class Player_Controller : MonoBehaviour
             int b = (int)Enum.Parse(typeof(Border), collision.gameObject.name);
             borderTouch |= b;
         }
+        else if(collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            if (invulnability > 0f) return; // iframe
+            Destroy(collision.gameObject); // destroy enemy bullet
+            Die();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -133,5 +149,11 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        GameManager.Instance().PlayerDie();
+        GameManager.SpawnExplosion(transform.position);
+        Destroy(gameObject);
+    }
 
 }
