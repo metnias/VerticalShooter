@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,13 +14,17 @@ public class GameManager : MonoBehaviour
     public GameObject explosionPrefab;
     public GameObject boomPrefab;
     public Pool_Manager[] itemPools;
+    public GameObject bossObject;
 
     public Image[] lifeImages;
     public Text boomText;
     public Text coinText;
 
     private float enemySpawnDelay = 3f;
-    private float enemySpawnCooldown = -5f;
+    private float enemySpawnCooldown = -3f;
+    [SerializeField]
+    private int bossCountdown = 20;
+    internal static int difficulty = 0;
 
     private int numLife = 3;
     private int numBoom = 1;
@@ -40,6 +45,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            difficulty = 0;
             UpdateUI();
         }
         else if (instance != this)
@@ -57,8 +63,14 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         enemySpawnCooldown += Time.deltaTime;
+        if (bossCountdown < 1)
+        {
+            if (enemySpawnCooldown > 6f) SpawnBoss();
+            return;
+        }
         if (enemySpawnCooldown > enemySpawnDelay)
         {
+            bossCountdown--;
             SpawnEnemy();
             enemySpawnCooldown = 0f;
             enemySpawnDelay = Random.Range(1f, 4f);
@@ -71,6 +83,22 @@ public class GameManager : MonoBehaviour
         {
             enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
         }
+    }
+
+    private void SpawnBoss()
+    {
+        if (bossObject.activeSelf) return;
+        bossObject.SetActive(true);
+        bossObject.transform.position = spawnPoints[1].position;
+        enemySpawnCooldown = -100000f;
+    }
+
+    internal void BossDie()
+    {
+        ClearBullets();
+        bossCountdown = 20;
+        enemySpawnCooldown = -10f;
+        difficulty++;
     }
 
     public void PlayerDie()
@@ -106,6 +134,12 @@ public class GameManager : MonoBehaviour
         var boom = Instantiate(instance.boomPrefab, pos, Quaternion.identity);
         Destroy(boom, 0.5f);
 
+        ClearBullets();
+        return boom;
+    }
+
+    public static void ClearBullets()
+    {
         var bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
         foreach (var bullet in bullets)
         {
@@ -113,7 +147,6 @@ public class GameManager : MonoBehaviour
             bang.transform.localScale = Vector3.one * 0.5f; // half sized
             Destroy(bullet);
         }
-        return boom;
     }
 
     public static GameObject SpawnItem(Vector3 pos, ItemType type)

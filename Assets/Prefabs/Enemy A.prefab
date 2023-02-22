@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSprite: {fileID: 4326287474489854147, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
-  health: 2
+  maxHealth: 2
   bulletPoolName: PoolEBulletC
 --- !u!114 &8051586651449086084
 MonoBehaviour:

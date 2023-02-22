@@ -142,7 +142,7 @@ public class Player_Controller : MonoBehaviour
 
                     if (bulletPoolB.TryDequeue(out var bulletB))
                     {
-                        bulletB.transform.position = transform.position + Vector3.left * 0.15f;
+                        bulletB.transform.position = transform.position;
                         bulletB.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
                     }
                 }
@@ -224,7 +224,7 @@ public class Player_Controller : MonoBehaviour
         if (power > 1)
         {
             var pow = GameManager.SpawnItem(transform.position, ItemType.Power);
-            pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 3f;
+            pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 4f;
         }
         Destroy(gameObject);
     }

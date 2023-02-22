@@ -8,8 +8,9 @@ public class Enemy_Controller : MonoBehaviour
     private Sprite ownSprite;
     protected SpriteRenderer spr;
 
-    public int health = 1;
-    private float hitShow = 0f;
+    public int maxHealth = 1;
+    private int health;
+    protected float hitShow = 0f;
 
     protected GameObject player;
     protected bool isBoss = false;
@@ -24,6 +25,10 @@ public class Enemy_Controller : MonoBehaviour
     protected virtual void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        health = Mathf.CeilToInt(maxHealth * (1 + (isBoss ? 0.5f : 0.2f) * GameManager.difficulty));
+        isVisible = false;
+        fireCooltime = -1f;
+        hitShow = 0f;
     }
 
     protected virtual void Update()

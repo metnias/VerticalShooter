@@ -15,9 +15,23 @@ public class Item_Handler : MonoBehaviour
 
     private bool eaten = false;
 
-    private void Awake()
+
+    private void OnEnable()
     {
-        GetComponent<Rigidbody2D>().velocity = Vector2.down * 0.5f;
+        eaten = false;
+        switch (type)
+        {
+            case ItemType.Coin:
+                GetComponent<CircleCollider2D>().enabled = true;
+                break;
+            case ItemType.Power:
+            case ItemType.Boom:
+                GetComponent<BoxCollider2D>().enabled = true;
+                break;
+        }
+        var rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0.2f;
+        rb.velocity = Vector2.down * 0.5f;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
