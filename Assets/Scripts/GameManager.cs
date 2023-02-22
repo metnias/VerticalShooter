@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject boomPrefab;
     public GameObject[] itemPrefabs;
 
-    public Text lifeText;
+    public Image[] lifeImages;
     public Text boomText;
     public Text coinText;
 
@@ -48,7 +48,8 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        lifeText.text = numLife.ToString();
+        for (int i = 0; i < lifeImages.Length; i++)
+            lifeImages[i].enabled = i + 1 <= numLife;
         boomText.text = numBoom.ToString();
         coinText.text = numCoin.ToString();
     }
