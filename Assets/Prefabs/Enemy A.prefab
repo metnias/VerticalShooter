@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitSprite: {fileID: 4326287474489854147, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   health: 2
-  bulletPrefab: {fileID: 7771110417872192174, guid: 0f392b1658e76d143b24c867167910f3, type: 3}
+  bulletPoolName: PoolEBulletC
 --- !u!114 &8051586651449086084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,3 +152,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90f4791ebee060458f7d3a79e5d7668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inPool: 1

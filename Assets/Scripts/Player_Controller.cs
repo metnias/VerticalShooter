@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
-    public GameObject bulletPrefabA;
-    public GameObject bulletPrefabB;
+    public string bulletPoolAname = "PoolPBulletA";
+    public string bulletPoolBname = "PoolPBulletB";
+
+    private Pool_Manager bulletPoolA;
+    private Pool_Manager bulletPoolB;
 
     public float speed = 4f;
     public int power = 1;
@@ -41,6 +44,13 @@ public class Player_Controller : MonoBehaviour
         animator = GetComponent<Animator>();
         rBody = GetComponent<Rigidbody2D>();
         spr = GetComponent<SpriteRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        bulletPoolA = GameObject.Find(bulletPoolAname).GetComponent<Pool_Manager>();
+        bulletPoolB = GameObject.Find(bulletPoolBname).GetComponent<Pool_Manager>();
+
         invulnerability = 2f;
         Invoke(nameof(GainControl), 1f);
         GetComponent<CircleCollider2D>().enabled = false;
@@ -92,30 +102,49 @@ public class Player_Controller : MonoBehaviour
         {
             case 1:
                 {
-                    var bullet = Instantiate(bulletPrefabA, transform.position, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    if (bulletPoolA.TryDequeue(out var bullet))
+                    {
+                        bullet.transform.position = transform.position;
+                        bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
                 }
                 break;
             case 2:
                 {
-                    var bullet = Instantiate(bulletPrefabA, transform.position + Vector3.right * 0.15f, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    if (bulletPoolA.TryDequeue(out var bulletR))
+                    {
+                        bulletR.transform.position = transform.position + Vector3.right * 0.15f;
+                        bulletR.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
 
-                    bullet = Instantiate(bulletPrefabA, transform.position + Vector3.left * 0.15f, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    if (bulletPoolA.TryDequeue(out var bulletL))
+                    {
+                        bulletL.transform.position = transform.position + Vector3.left * 0.15f;
+                        bulletL.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
                 }
                 break;
             default:
             case 3:
                 {
-                    var bullet = Instantiate(bulletPrefabA, transform.position + Vector3.right * 0.3f, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
 
-                    bullet = Instantiate(bulletPrefabA, transform.position + Vector3.left * 0.3f, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    if (bulletPoolA.TryDequeue(out var bulletR))
+                    {
+                        bulletR.transform.position = transform.position + Vector3.right * 0.3f;
+                        bulletR.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
 
-                    bullet = Instantiate(bulletPrefabB, transform.position, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    if (bulletPoolA.TryDequeue(out var bulletL))
+                    {
+                        bulletL.transform.position = transform.position + Vector3.left * 0.3f;
+                        bulletL.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
+
+                    if (bulletPoolB.TryDequeue(out var bulletB))
+                    {
+                        bulletB.transform.position = transform.position + Vector3.left * 0.15f;
+                        bulletB.GetComponent<Rigidbody2D>().AddForce(8f * Vector3.up, ForceMode2D.Impulse);
+                    }
                 }
                 break;
         }

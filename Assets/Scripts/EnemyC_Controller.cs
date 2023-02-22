@@ -6,10 +6,12 @@ using static UnityEngine.Mathf;
 
 public class EnemyC_Controller : Enemy_Controller
 {
-    public GameObject bulletPrefab;
+    public string bulletPoolName = "PoolEBulletB";
+    private Pool_Manager bulletPool;
 
     private void Start()
     {
+        bulletPool = GameObject.Find(bulletPoolName).GetComponent<Pool_Manager>();
         fireDelay = 1.5f;
     }
 
@@ -44,23 +46,31 @@ public class EnemyC_Controller : Enemy_Controller
 
         const float SPEED = 3f;
 
-        var dir = new Vector2(Cos(angle * Deg2Rad), Sin(angle * Deg2Rad));
-        var bullet = Instantiate(bulletPrefab, transform.position + new Vector3(0f, -0.2f), Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        if (bulletPool.TryDequeue(out var bulletC))
+        {
+            var dir = new Vector2(Cos(angle * Deg2Rad), Sin(angle * Deg2Rad));
+            bulletC.transform.position = transform.position + new Vector3(0f, -0.2f);
+            bulletC.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        }
 
-        dir = new Vector2(Cos(angleL * Deg2Rad), Sin(angleL * Deg2Rad));
-        bullet = Instantiate(bulletPrefab, transform.position + new Vector3(0.2f, -0.2f), Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        if (bulletPool.TryDequeue(out var bulletL))
+        {
+            var dir = new Vector2(Cos(angleL * Deg2Rad), Sin(angleL * Deg2Rad));
+            bulletL.transform.position = transform.position + new Vector3(0.2f, -0.2f);
+            bulletL.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        }
 
-        dir = new Vector2(Cos(angleR * Deg2Rad), Sin(angleR * Deg2Rad));
-        bullet = Instantiate(bulletPrefab, transform.position + new Vector3(-0.2f, -0.2f), Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        if (bulletPool.TryDequeue(out var bulletR))
+        {
+            var dir = new Vector2(Cos(angleR * Deg2Rad), Sin(angleR * Deg2Rad));
+            bulletR.transform.position = transform.position + new Vector3(-0.2f, -0.2f);
+            bulletR.GetComponent<Rigidbody2D>().AddForce(dir * SPEED, ForceMode2D.Impulse);
+        }
 
     }
 
     protected override void Die()
     {
-        base.Die();
         float rnd = Random.value;
         if (rnd < 0.3f)
         {
@@ -74,6 +84,7 @@ public class EnemyC_Controller : Enemy_Controller
         {
             GameManager.SpawnItem(transform.position, ItemType.Coin);
         }
+        base.Die();
     }
 
 }

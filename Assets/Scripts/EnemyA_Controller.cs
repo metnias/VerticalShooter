@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class EnemyA_Controller : Enemy_Controller
 {
-    public GameObject bulletPrefab;
+    public string bulletPoolName = "PoolEBulletC";
+    private Pool_Manager bulletPool;
 
     private void Start()
     {
+        bulletPool = GameObject.Find(bulletPoolName).GetComponent<Pool_Manager>();
         fireDelay = 0.5f;
     }
 
@@ -34,16 +36,19 @@ public class EnemyA_Controller : Enemy_Controller
 
         const float SPEED = 7f;
 
-        var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().AddForce(SPEED * Vector3.down, ForceMode2D.Impulse);
+        if (bulletPool.TryDequeue(out var bullet))
+        {
+            bullet.transform.position = transform.position;
+            bullet.GetComponent<Rigidbody2D>().AddForce(SPEED * Vector3.down, ForceMode2D.Impulse);
+        }
     }
 
     protected override void Die()
     {
-        base.Die();
         if (Random.value < 0.4f)
         {
             GameManager.SpawnItem(transform.position, ItemType.Coin);
         }
+        base.Die();
     }
 }

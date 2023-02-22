@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public Transform[] spawnPoints;
-    public GameObject[] enemyPrefabs;
+    public Pool_Manager[] enemyPools;
     public GameObject explosionPrefab;
     public GameObject boomPrefab;
-    public GameObject[] itemPrefabs;
+    public Pool_Manager[] itemPools;
 
     public Image[] lifeImages;
     public Text boomText;
@@ -67,10 +67,10 @@ public class GameManager : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)],
-            spawnPoints[Random.Range(0, spawnPoints.Length)].position,
-            Quaternion.identity);
-
+        if (enemyPools[Random.Range(0, enemyPools.Length)].TryDequeue(out var enemy))
+        {
+            enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+        }
     }
 
     public void PlayerDie()
@@ -118,6 +118,11 @@ public class GameManager : MonoBehaviour
 
     public static GameObject SpawnItem(Vector3 pos, ItemType type)
     {
-        return Instantiate(instance.itemPrefabs[(int)type], pos, Quaternion.identity);
+        if (instance.itemPools[(int)type].TryDequeue(out var item))
+        {
+            item.transform.position = pos;
+            return item;
+        }
+        return null;
     }
 }

@@ -19,6 +19,10 @@ public class Enemy_Controller : MonoBehaviour
         rBody = GetComponent<Rigidbody2D>();
         spr = GetComponent<SpriteRenderer>();
         ownSprite = spr.sprite;
+    }
+
+    protected virtual void OnEnable()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -46,7 +50,7 @@ public class Enemy_Controller : MonoBehaviour
             if (fireDelay < fireCooltime)
             { fireCooltime = 0f; Fire(); }
         }
-        else fireCooltime = player == null ? -1f : 0f;
+        else fireCooltime = -1f;
     }
 
     protected virtual void Fire()
@@ -97,6 +101,7 @@ public class Enemy_Controller : MonoBehaviour
     protected virtual void Die()
     {
         GameManager.SpawnExplosion(transform.position);
-        Destroy(gameObject);
+        transform.position = transform.parent.position;
+        gameObject.SetActive(false);
     }
 }

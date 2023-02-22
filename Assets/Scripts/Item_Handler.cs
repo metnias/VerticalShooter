@@ -45,6 +45,9 @@ public class Item_Handler : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
         eaten = true;
-        Destroy(gameObject, 2f);
+        Invoke(nameof(Deactivate), 2f);
     }
+
+    private void Deactivate() => gameObject.SetActive(false);
+    
 }
