@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public Text boomText;
     public Text coinText;
 
+    public GameObject panelGameover;
+
     private float enemySpawnDelay = 3f;
     private float enemySpawnCooldown = -3f;
     [SerializeField]
@@ -119,6 +121,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void GameOver()
+    {
+        panelGameover.SetActive(true);
+    }
+
+    public static void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

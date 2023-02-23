@@ -217,7 +217,7 @@ public class Boss_Controller : Enemy_Controller
             float a = Random.Range(-180f, 180f) * Deg2Rad;
             Vector2 dir = new(Cos(a), Sin(a));
             var coin = GameManager.SpawnItem(transform.position + (Vector3)dir * 0.3f, ItemType.Coin);
-            coin.GetComponent<Rigidbody2D>().velocity = dir * 0.5f;
+            if (coin != null) coin.GetComponent<Rigidbody2D>().velocity = dir * 0.5f;
         }
     }
 }

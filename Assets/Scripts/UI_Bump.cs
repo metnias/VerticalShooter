@@ -9,6 +9,7 @@ public class UI_Bump : MonoBehaviour
     private Rigidbody2D rBody;
 
     public bool lockRight = true;
+    public bool lockUp = true;
 
     private void Start()
     {
@@ -29,7 +30,8 @@ public class UI_Bump : MonoBehaviour
         Vector3 clamp = transform.position;
         if (lockRight) clamp.x = Mathf.Min(clamp.x, origPos.x);
         else clamp.x = Mathf.Max(clamp.x, origPos.x);
-        clamp.y = Mathf.Min(clamp.y, origPos.y);
+        if (lockUp) clamp.y = Mathf.Min(clamp.y, origPos.y);
+        else clamp.y = Mathf.Max(clamp.y, origPos.y);
 
         Vector2 dir = origPos - (Vector2)transform.position;
         rBody.velocity = Vector2.ClampMagnitude(dir * 8f, 8f);

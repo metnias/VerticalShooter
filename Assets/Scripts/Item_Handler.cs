@@ -19,19 +19,10 @@ public class Item_Handler : MonoBehaviour
     private void OnEnable()
     {
         eaten = false;
-        switch (type)
-        {
-            case ItemType.Coin:
-                GetComponent<CircleCollider2D>().enabled = true;
-                break;
-            case ItemType.Power:
-            case ItemType.Boom:
-                GetComponent<BoxCollider2D>().enabled = true;
-                break;
-        }
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0.2f;
         rb.velocity = Vector2.down * 0.5f;
+        CancelInvoke(nameof(Deactivate));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -42,16 +33,13 @@ public class Item_Handler : MonoBehaviour
         {
             case ItemType.Coin:
                 GameManager.Instance().AddCoin(1);
-                GetComponent<CircleCollider2D>().enabled = false;
                 break;
             case ItemType.Power:
                 var pc = collision.gameObject.GetComponent<Player_Controller>();
                 pc.power = Mathf.Clamp(pc.power + 1, 1, 3);
-                GetComponent<BoxCollider2D>().enabled = false;
                 break;
             case ItemType.Boom:
                 GameManager.Instance().AddBoom(1);
-                GetComponent<BoxCollider2D>().enabled = false;
                 break;
         }
         var rb = GetComponent<Rigidbody2D>();
