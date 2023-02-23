@@ -25,7 +25,7 @@ public class Enemy_Controller : MonoBehaviour
     protected virtual void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        health = Mathf.CeilToInt(maxHealth * (1 + (isBoss ? 0.5f : 0.2f) * GameManager.difficulty));
+        health = Mathf.CeilToInt(maxHealth * (1 + (isBoss ? 1f : 0.5f) * GameManager.difficulty));
         isVisible = false;
         fireCooltime = -1f;
         hitShow = 0f;
@@ -51,6 +51,8 @@ public class Enemy_Controller : MonoBehaviour
     {
         if (isVisible)
         {
+            if (player == null || player.GetComponent<Player_Controller>().Invulnerable)
+            { fireCooltime = 0f; return; }
             fireCooltime += Time.deltaTime;
             if (fireDelay < fireCooltime)
             { fireCooltime = 0f; Fire(); }

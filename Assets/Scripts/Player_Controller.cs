@@ -175,6 +175,7 @@ public class Player_Controller : MonoBehaviour
         lastBoom = true;
         if (!GameManager.Instance().UseBoom()) return;
         GameManager.SpawnBoom(transform.position);
+        invulnerability = 1f;
     }
 
     private void FixedUpdate()

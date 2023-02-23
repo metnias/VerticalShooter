@@ -37,7 +37,7 @@ public class Boss_Controller : Enemy_Controller
                 bang.GetComponent<SpriteRenderer>().sortingOrder = 30;
             }
             rBody.velocity = Vector2.zero;
-            GameManager.ShakeCam(2f);
+            GameManager.ShakeCam(1f);
             return;
         }
 
