@@ -1645,6 +1645,7 @@ GameObject:
   - component: {fileID: 792270704}
   - component: {fileID: 792270707}
   - component: {fileID: 792270706}
+  - component: {fileID: 792270708}
   m_Layer: 5
   m_Name: Coin
   m_TagString: Untagged
@@ -1711,6 +1712,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792270703}
   m_CullTransparentMesh: 1
+--- !u!95 &792270708
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792270703}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8352ff196a717554099fbb1d33f43bac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &814815341
 GameObject:
   m_ObjectHideFlags: 0
