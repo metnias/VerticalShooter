@@ -226,6 +226,7 @@ public class Player_Controller : MonoBehaviour
             var pow = GameManager.SpawnItem(transform.position, ItemType.Power);
             pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 4f;
         }
+        GameManager.ShakeCam(2f);
         Destroy(gameObject);
     }
 

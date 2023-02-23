@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject boomPrefab;
     public Pool_Manager[] itemPools;
     public GameObject bossObject;
+    public Camera_Shake camShake;
 
     public Image[] lifeImages;
     public Text boomText;
@@ -133,7 +134,7 @@ public class GameManager : MonoBehaviour
     {
         var boom = Instantiate(instance.boomPrefab, pos, Quaternion.identity);
         Destroy(boom, 0.5f);
-
+        ShakeCam(1f);
         ClearBullets();
         return boom;
     }
@@ -158,4 +159,7 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
+
+    public static void ShakeCam(float shake)
+        => instance.camShake.SetShake(shake);
 }

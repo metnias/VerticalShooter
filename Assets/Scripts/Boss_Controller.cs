@@ -37,6 +37,7 @@ public class Boss_Controller : Enemy_Controller
                 bang.GetComponent<SpriteRenderer>().sortingOrder = 30;
             }
             rBody.velocity = Vector2.zero;
+            GameManager.ShakeCam(2f);
             return;
         }
 
@@ -210,6 +211,7 @@ public class Boss_Controller : Enemy_Controller
         GameManager.SpawnBoom(transform.position);
         gameObject.SetActive(false);
         GameManager.SpawnItem(transform.position, ItemType.Power);
+        GameManager.ShakeCam(4f);
         for (int i = 0; i < 10; i++)
         {
             float a = Random.Range(-180f, 180f) * Deg2Rad;
