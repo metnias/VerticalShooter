@@ -23,7 +23,7 @@ public class Player_Controller : MonoBehaviour
     private float dirY = 1f;
     private float bulletCooldown = 0f;
 
-    private int borderTouch = 0;
+    private int borderTouch = 0; // border touch flags with bitmask
 
     private bool canControl = false;
 
@@ -31,11 +31,12 @@ public class Player_Controller : MonoBehaviour
     private enum Border
     {
         Top = 1 << 1, Bottom = 1 << 2, Left = 1 << 3, Right = 1 << 4
+            // names matched with gameobjects' names
     }
 
-    private float invulnerability;
+    private float invulnerability; // iframes in seconds
     internal bool Invulnerable => invulnerability > 0f;
-    private bool lastBoom = false;
+    private bool lastBoom = false; // whether boom key is pressed last frame
 
     private void Start()
     {
@@ -76,12 +77,12 @@ public class Player_Controller : MonoBehaviour
         dirX = Input.GetAxisRaw("Horizontal");
         if ((borderTouch & (int)Border.Left) > 0 && dirX < 0f) dirX = 0f;
         else if ((borderTouch & (int)Border.Right) > 0 && dirX > 0f) dirX = 0f;
-
+        // clamping using border flags
         dirY = Input.GetAxisRaw("Vertical");
         if ((borderTouch & (int)Border.Bottom) > 0 && dirY < 0f) dirY = 0f;
         else if ((borderTouch & (int)Border.Top) > 0 && dirY > 0f) dirY = 0f;
 
-        animator.SetInteger(ANIMX, dirX == 0 ? 0 : (int)Mathf.Sign(dirX));
+        animator.SetInteger(ANIMX, dirX == 0 ? 0 : (int)Mathf.Sign(dirX)); // set animation
     }
 
     private void Fire()
@@ -98,7 +99,7 @@ public class Player_Controller : MonoBehaviour
     {
         switch (power)
         {
-            case 1:
+            case 1: // pow 1 bullet
                 {
                     if (bulletPoolA.TryDequeue(out var bullet))
                     {
@@ -107,7 +108,7 @@ public class Player_Controller : MonoBehaviour
                     }
                 }
                 break;
-            case 2:
+            case 2: // 2 pow 1 bullets
                 {
                     if (bulletPoolA.TryDequeue(out var bulletR))
                     {
@@ -123,7 +124,7 @@ public class Player_Controller : MonoBehaviour
                 }
                 break;
             default:
-            case 3:
+            case 3: // 2 pow 1 bullets & 1 pow 2 bullet
                 {
 
                     if (bulletPoolA.TryDequeue(out var bulletR))
@@ -159,9 +160,9 @@ public class Player_Controller : MonoBehaviour
         if (invulnerability > 0f)
         {
             invulnerability -= Time.deltaTime;
-            spr.enabled = Mathf.Sin(invulnerability * 50f) > 0f;
+            spr.enabled = Mathf.Sin(invulnerability * 50f) > 0f; // sprite blinking
         }
-        else { invulnerability = 0f; spr.enabled = true; }
+        else { invulnerability = 0f; spr.enabled = true; } // sprite on
     }
 
     private void Boom()
@@ -171,9 +172,9 @@ public class Player_Controller : MonoBehaviour
         if (!Input.GetButton("Fire2")) { lastBoom = false; return; }
         if (lastBoom) return;
         lastBoom = true;
-        if (!GameManager.Instance().UseBoom()) return;
-        GameManager.SpawnBoom(transform.position);
-        invulnerability = 1f;
+        if (!GameManager.Instance().UseBoom()) return; // no boom left
+        GameManager.SpawnBoom(transform.position); // spawn boom
+        invulnerability = 1f; // grant 1 sec iframe
     }
 
     private void FixedUpdate()
@@ -189,7 +190,7 @@ public class Player_Controller : MonoBehaviour
         if (collision.gameObject.CompareTag("PlayerBorder"))
         {
             int b = (int)Enum.Parse(typeof(Border), collision.gameObject.name);
-            borderTouch |= b;
+            borderTouch |= b; // border flagging using bitmask
         }
         else if (collision.gameObject.CompareTag("EnemyBullet"))
         {
@@ -204,7 +205,7 @@ public class Player_Controller : MonoBehaviour
         if (collision.gameObject.CompareTag("PlayerBorder"))
         {
             int b = (int)Enum.Parse(typeof(Border), collision.gameObject.name);
-            borderTouch ^= b;
+            borderTouch ^= b; // border unflagging using bitmask
         }
     }
 
@@ -219,9 +220,9 @@ public class Player_Controller : MonoBehaviour
     private void ReallyDie()
     {
         GameManager.Instance().PlayerDie();
-        GameManager.SpawnBoom(transform.position);
+        GameManager.SpawnBoom(transform.position); // this also clears bullets
         if (power > 1)
-        {
+        { // if player had power, spawn 1 power and throw up to let you pick it up
             var pow = GameManager.SpawnItem(transform.position, ItemType.Power);
             pow.GetComponent<Rigidbody2D>().velocity = Vector2.up * 4f;
         }
