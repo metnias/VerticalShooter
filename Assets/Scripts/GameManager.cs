@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static GameManager Instance() => instance;
 
-    // Gameplay objects
+    [Header("Gameplay")]
     public GameObject playerPrefab; // player prefab for respawn
     public Transform[] spawnPoints; // enemy spawn points (1: boss spawn)
     public Pool_Manager[] enemyPools; // enemy pools
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public GameObject bossObject; // boss gameobject
     public Camera_Shake camShake; // camera shake script instance
 
-    // GUI
+    [Header("GUI")]
     public Image[] lifeImages; // life image 
     public Text boomText; // boom counter
     public Text coinText; // coin counter

@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
+    [Header("BulletPools")]
     public string bulletPoolAname = "PoolPBulletA";
     public string bulletPoolBname = "PoolPBulletB";
 
     private Pool_Manager bulletPoolA;
     private Pool_Manager bulletPoolB;
 
+    [Header("Stats")]
     public float speed = 4f;
     public int power = 1;
     public float[] bulletDelay;
