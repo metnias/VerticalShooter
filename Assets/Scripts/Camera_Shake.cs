@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Circular camera shake
+/// (because random vector camera shake would look too frantic for this shooting game)
+/// </summary>
 public class Camera_Shake : MonoBehaviour
 {
     private float shake = 0f;
@@ -12,10 +14,10 @@ public class Camera_Shake : MonoBehaviour
 
     private void Start()
     {
-        anchorPos = transform.position;
+        anchorPos = transform.position; // get anchor pos
     }
 
-    private const float SPD = 40f;
+    private const float SPD = 40f; // how fast the camera spins
 
     private void Update()
     {

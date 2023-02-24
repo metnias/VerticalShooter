@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemType : int
@@ -36,7 +34,8 @@ public class Item_Handler : MonoBehaviour
                 break;
             case ItemType.Power:
                 var pc = collision.gameObject.GetComponent<Player_Controller>();
-                pc.power = Mathf.Clamp(pc.power + 1, 1, 3);
+                if (pc.power >= 3) { pc.power = 3; GameManager.Instance().AddCoin(3); }
+                else pc.power++;
                 break;
             case ItemType.Boom:
                 GameManager.Instance().AddBoom(1);
@@ -45,11 +44,11 @@ public class Item_Handler : MonoBehaviour
         var rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 2f;
         rb.velocity = Vector2.zero;
-        rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * 10f, ForceMode2D.Impulse); // "fling up and falls down" animation
         eaten = true;
         Invoke(nameof(Deactivate), 2f);
     }
 
     private void Deactivate() => gameObject.SetActive(false);
-    
+
 }

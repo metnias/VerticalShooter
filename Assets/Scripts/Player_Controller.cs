@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
@@ -169,7 +167,7 @@ public class Player_Controller : MonoBehaviour
     private void Boom()
     {
         if (!canControl) return;
-        
+
         if (!Input.GetButton("Fire2")) { lastBoom = false; return; }
         if (lastBoom) return;
         lastBoom = true;
@@ -193,7 +191,7 @@ public class Player_Controller : MonoBehaviour
             int b = (int)Enum.Parse(typeof(Border), collision.gameObject.name);
             borderTouch |= b;
         }
-        else if(collision.gameObject.CompareTag("EnemyBullet"))
+        else if (collision.gameObject.CompareTag("EnemyBullet"))
         {
             if (Invulnerable) return; // iframe
             Destroy(collision.gameObject); // destroy enemy bullet

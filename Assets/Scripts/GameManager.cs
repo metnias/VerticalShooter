@@ -1,42 +1,62 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Singleton GameManager
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
+    /// <summary>
+    /// Returns GameManager Singleton Instance
+    /// </summary>
     public static GameManager Instance() => instance;
 
-    public GameObject playerPrefab;
-    public Transform[] spawnPoints;
-    public Pool_Manager[] enemyPools;
-    public GameObject explosionPrefab;
-    public GameObject boomPrefab;
-    public Pool_Manager[] itemPools;
-    public GameObject bossObject;
-    public Camera_Shake camShake;
+    // Gameplay objects
+    public GameObject playerPrefab; // player prefab for respawn
+    public Transform[] spawnPoints; // enemy spawn points (1: boss spawn)
+    public Pool_Manager[] enemyPools; // enemy pools
+    public GameObject explosionPrefab; // explosion prefab
+    public GameObject boomPrefab; // boom prefab
+    public Pool_Manager[] itemPools; // item pools
+    public GameObject bossObject; // boss gameobject
+    public Camera_Shake camShake; // camera shake script instance
 
-    public Image[] lifeImages;
-    public Text boomText;
-    public Text coinText;
+    // GUI
+    public Image[] lifeImages; // life image 
+    public Text boomText; // boom counter
+    public Text coinText; // coin counter
+    public GameObject panelGameover; // gameover panel
 
-    public GameObject panelGameover;
-
-    private float enemySpawnDelay = 3f;
-    private float enemySpawnCooldown = -3f;
+    private float enemySpawnDelay = 3f; // enemy spawn delay
+    private float enemySpawnCooldown = -3f; // enemy spawn cooldown
     [SerializeField]
-    private int bossCountdown = 20;
-    internal static int difficulty = 0;
+    private int bossCountdown = 20; // enemy spawn left until boss battle
+    internal static int difficulty = 0; // difficulty which increases after each boss battle
 
-    private int numLife = 3;
-    private int numBoom = 1;
-    private int numCoin = 0;
+    private int numLife = 3; // number of player life
+    private int numBoom = 1; // number of boom left
+    private int numCoin = 0; // number of coin collected (score)
 
     public void AddCoin(int num)
     { numCoin += num; UpdateUI(); }
     public void AddBoom(int num)
-    { numBoom += num; UpdateUI(); }
+    {
+        if (numBoom + num <= 9) numBoom += num;
+        else
+        {
+            numBoom += num;
+            int o = numBoom - 9;
+            numBoom = 9;
+            AddCoin(2 * o);
+        }
+        UpdateUI();
+    }
+    /// <summary>
+    /// Try using boom. 
+    /// </summary>
+    /// <returns>Whether boom is left and used</returns>
     public bool UseBoom()
     {
         if (numBoom > 0) { numBoom--; UpdateUI(); return true; }
@@ -48,7 +68,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            difficulty = 0;
+            difficulty = 0; // reset difficulty to 0
             UpdateUI();
         }
         else if (instance != this)
@@ -93,14 +113,14 @@ public class GameManager : MonoBehaviour
         if (bossObject.activeSelf) return;
         bossObject.SetActive(true);
         bossObject.transform.position = spawnPoints[1].position;
-        enemySpawnCooldown = -100000f;
+        enemySpawnCooldown = -100000f; // don't spawn normal enemy
     }
 
     internal void BossDie()
     {
         ClearBullets();
         bossCountdown = 20;
-        enemySpawnCooldown = -10f;
+        enemySpawnCooldown = -10f; // break time before the next stage
         difficulty++;
     }
 

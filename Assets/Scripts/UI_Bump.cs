@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Moves away GUI when the player collides into
+/// </summary>
 public class UI_Bump : MonoBehaviour
 {
     public RectTransform panel;
@@ -15,12 +18,13 @@ public class UI_Bump : MonoBehaviour
     {
         rBody = GetComponent<Rigidbody2D>();
         origPos = transform.position;
-        origPanelPos = (Vector2)panel.position - origPos;
+        origPanelPos = (Vector2)panel.position - origPos; // save anchors
     }
 
     private void Update()
     {
         panel.position = origPanelPos + (Vector2)transform.position;
+        // moves bound UI panel with this
     }
 
     private void FixedUpdate()
@@ -34,6 +38,6 @@ public class UI_Bump : MonoBehaviour
         else clamp.y = Mathf.Max(clamp.y, origPos.y);
 
         Vector2 dir = origPos - (Vector2)transform.position;
-        rBody.velocity = Vector2.ClampMagnitude(dir * 8f, 8f);
+        rBody.velocity = Vector2.ClampMagnitude(dir * 8f, 8f); // bumps back to orig pos
     }
 }

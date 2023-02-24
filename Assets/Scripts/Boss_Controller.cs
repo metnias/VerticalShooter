@@ -126,7 +126,7 @@ public class Boss_Controller : Enemy_Controller
     /// </summary>
     private void FirePattern1()
     {
-        float angle = Random.Range(-140f, -60f); 
+        float angle = Random.Range(-140f, -60f);
 
         const float SPEED = 4f;
         const int COUNT = 10;
@@ -189,7 +189,7 @@ public class Boss_Controller : Enemy_Controller
 
                 Vector2 dir = new(Cos(a * Deg2Rad), Sin(a * Deg2Rad));
                 bullet.transform.position = transform.position;
-                bullet.GetComponent<Rigidbody2D>().AddForce(dir * SPEED * (i % 2 == 0 ? 2f : 1f), ForceMode2D.Impulse);
+                bullet.GetComponent<Rigidbody2D>().AddForce((i % 2 == 0 ? 2f : 1f) * SPEED * dir, ForceMode2D.Impulse);
             }
         }
     }
